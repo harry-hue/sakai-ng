@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 40 280 220" role="img" aria-label="Birthday cake">
+  <defs>
+    <linearGradient id="cakeBody" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#fbcfe8"/>
+      <stop offset="100%" style="stop-color:#be185d"/>
+    </linearGradient>
+    <radialGradient id="flameG" cx="50%" cy="80%" r="50%">
+      <stop offset="0%" style="stop-color:#fef08a"/>
+      <stop offset="55%" style="stop-color:#f97316"/>
+      <stop offset="100%" style="stop-color:#ea580c;stop-opacity:0"/>
+    </radialGradient>
+  </defs>
+  <!-- single simple tier — no plate, no outline -->
+  <rect x="52" y="140" width="176" height="96" rx="14" fill="url(#cakeBody)"/>
+  <rect x="52" y="140" width="176" height="18" rx="8" fill="#ffffff" opacity="0.28"/>
+  <path fill="#fff8f0"
+    d="M58 140c10-7 20-9 32-5 14-9 30-9 44 0 11-5 24-5 36 2 11-7 26-7 38 0v12c-16 9-34 9-50 0-16 9-32 9-48 0-16 9-32 9-48 0z"/>
+  <rect x="112" y="96" width="10" height="48" rx="2" fill="#fde047"/>
+  <rect x="135" y="92" width="10" height="52" rx="2" fill="#fde047"/>
+  <rect x="158" y="96" width="10" height="48" rx="2" fill="#fde047"/>
+  <ellipse cx="117" cy="82" rx="9" ry="14" fill="url(#flameG)">
+    <animate attributeName="ry" values="14;17;13;14" dur="0.55s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="1;0.85;1" dur="0.55s" repeatCount="indefinite"/>
+  </ellipse>
+  <ellipse cx="140" cy="78" rx="9" ry="14" fill="url(#flameG)">
+    <animate attributeName="ry" values="14;16;14" dur="0.48s" repeatCount="indefinite" begin="0.1s"/>
+  </ellipse>
+  <ellipse cx="163" cy="82" rx="9" ry="14" fill="url(#flameG)">
+    <animate attributeName="ry" values="14;17;13;14" dur="0.52s" repeatCount="indefinite" begin="0.2s"/>
+  </ellipse>
+</svg>

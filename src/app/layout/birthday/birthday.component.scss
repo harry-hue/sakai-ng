@@ -1,0 +1,548 @@
+:host {
+    display: block;
+    min-height: 100vh;
+}
+
+.birthday-root {
+    position: relative;
+    min-height: 100vh;
+    overflow-x: hidden;
+    background: radial-gradient(ellipse 120% 80% at 50% 0%, #1e1b4b 0%, #0f172a 45%, #020617 100%);
+    color: #f8fafc;
+}
+
+.birthday-audio {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.music-toggle {
+    position: fixed;
+    right: clamp(0.75rem, 3vw, 1.25rem);
+    bottom: clamp(0.75rem, 3vw, 1.25rem);
+    z-index: 20;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 0.85rem;
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #0f172a;
+    background: linear-gradient(135deg, #fef9c3 0%, #fde047 45%, #fb923c 100%);
+    box-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.35),
+        0 0 0 1px rgba(255, 255, 255, 0.25) inset;
+    transition:
+        transform 0.15s ease,
+        filter 0.15s ease;
+}
+
+.music-toggle:hover {
+    filter: brightness(1.08);
+    transform: scale(1.03);
+}
+
+.music-toggle:active {
+    transform: scale(0.98);
+}
+
+.music-toggle-label {
+    font-size: 0.8rem;
+}
+
+/* ----- Fireworks (radial burst / sky vibe) ----- */
+.fireworks {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.fw {
+    --fw-delay: 0s;
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    transform: translate(-50%, -50%);
+}
+
+.fw-flash {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 32px;
+    height: 32px;
+    margin: -16px 0 0 -16px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(254, 240, 138, 0.85) 35%, transparent 72%);
+    opacity: 0;
+    transform: scale(0);
+    animation: fw-flash-pop 3.6s ease-out infinite;
+    animation-delay: var(--fw-delay);
+    filter: blur(0.5px);
+}
+
+.fw-ring {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 10px;
+    height: 10px;
+    margin: -5px 0 0 -5px;
+    border-radius: 50%;
+    background: transparent;
+    opacity: 0;
+    transform: scale(0);
+    animation: fw-shell-expand 3.6s ease-out infinite;
+    will-change: transform, opacity;
+}
+
+/* Outer chunky ring ~ sky mortar burst */
+.fw-ring--big {
+    animation-delay: calc(var(--fw-delay) + 0.03s);
+    box-shadow:
+        0 -132px 18px 10px rgba(254, 240, 138, 0.95),
+        66px -114px 16px 8px rgba(244, 114, 182, 0.92),
+        114px -66px 14px 8px rgba(56, 189, 248, 0.9),
+        132px 0 18px 9px rgba(167, 139, 250, 0.92),
+        114px 66px 16px 8px rgba(251, 146, 60, 0.9),
+        66px 114px 14px 8px rgba(244, 114, 182, 0.88),
+        0 132px 18px 10px rgba(254, 240, 138, 0.94),
+        -66px 114px 16px 8px rgba(74, 222, 128, 0.88),
+        -114px 66px 14px 8px rgba(56, 189, 248, 0.88),
+        -132px 0 18px 9px rgba(251, 113, 133, 0.9),
+        -114px -66px 16px 8px rgba(167, 139, 250, 0.88),
+        -66px -114px 14px 8px rgba(251, 146, 60, 0.88),
+        /* mid-offset rays for fuller disk */
+        0 -88px 12px 6px rgba(255, 255, 255, 0.55),
+        88px -88px 12px 6px rgba(253, 224, 71, 0.6),
+        88px 0 12px 6px rgba(244, 114, 182, 0.55),
+        88px 88px 12px 6px rgba(56, 189, 248, 0.55),
+        0 88px 12px 6px rgba(167, 139, 250, 0.55),
+        -88px 88px 12px 6px rgba(251, 146, 60, 0.55),
+        -88px 0 12px 6px rgba(244, 114, 182, 0.55),
+        -88px -88px 12px 6px rgba(74, 222, 128, 0.55);
+}
+
+.fw-ring--mid {
+    animation-delay: calc(var(--fw-delay) + 0.14s);
+    box-shadow:
+        0 -82px 12px 6px rgba(254, 249, 195, 0.85),
+        71px -41px 11px 5px rgba(251, 146, 60, 0.82),
+        71px 41px 11px 5px rgba(244, 114, 182, 0.82),
+        0 82px 12px 6px rgba(56, 189, 248, 0.82),
+        -71px 41px 11px 5px rgba(167, 139, 250, 0.82),
+        -71px -41px 11px 5px rgba(244, 228, 255, 0.8),
+        /* hex fill */
+        41px -71px 10px 5px rgba(253, 224, 71, 0.78),
+        41px 71px 10px 5px rgba(52, 211, 153, 0.75),
+        -41px 71px 10px 5px rgba(251, 113, 133, 0.78),
+        -41px -71px 10px 5px rgba(96, 165, 250, 0.78);
+}
+
+.fw-ring--inner {
+    animation-delay: calc(var(--fw-delay) + 0.26s);
+    box-shadow:
+        0 -44px 8px 5px rgba(255, 255, 255, 0.75),
+        38px -22px 8px 4px rgba(254, 240, 138, 0.8),
+        38px 22px 8px 4px rgba(251, 207, 232, 0.78),
+        0 44px 8px 5px rgba(125, 211, 252, 0.78),
+        -38px 22px 8px 4px rgba(216, 180, 254, 0.78),
+        -38px -22px 8px 4px rgba(254, 215, 170, 0.78);
+}
+
+.fw[data-n='1'] {
+    left: 8%;
+    top: 16%;
+    --fw-delay: 0s;
+}
+.fw[data-n='2'] {
+    left: 22%;
+    top: 40%;
+    --fw-delay: 0.42s;
+}
+.fw[data-n='3'] {
+    left: 78%;
+    top: 12%;
+    --fw-delay: 0.84s;
+}
+.fw[data-n='4'] {
+    left: 90%;
+    top: 36%;
+    --fw-delay: 1.08s;
+}
+.fw[data-n='5'] {
+    left: 50%;
+    top: 8%;
+    --fw-delay: 0.2s;
+}
+.fw[data-n='6'] {
+    left: 64%;
+    top: 52%;
+    --fw-delay: 1.52s;
+}
+.fw[data-n='7'] {
+    left: 14%;
+    top: 70%;
+    --fw-delay: 1.92s;
+}
+.fw[data-n='8'] {
+    left: 52%;
+    top: 66%;
+    --fw-delay: 2.32s;
+}
+.fw[data-n='9'] {
+    left: 94%;
+    top: 76%;
+    --fw-delay: 0.62s;
+}
+.fw[data-n='10'] {
+    left: 34%;
+    top: 26%;
+    --fw-delay: 1.72s;
+}
+.fw[data-n='11'] {
+    left: 72%;
+    top: 22%;
+    --fw-delay: 2.72s;
+}
+.fw[data-n='12'] {
+    left: 4%;
+    top: 46%;
+    --fw-delay: 3s;
+}
+.fw[data-n='13'] {
+    left: 42%;
+    top: 54%;
+    --fw-delay: 1.02s;
+}
+.fw[data-n='14'] {
+    left: 58%;
+    top: 28%;
+    --fw-delay: 1.38s;
+}
+.fw[data-n='15'] {
+    left: 84%;
+    top: 58%;
+    --fw-delay: 2.18s;
+}
+
+@keyframes fw-flash-pop {
+    0%,
+    4% {
+        opacity: 0;
+        transform: scale(0);
+    }
+    6% {
+        opacity: 1;
+        transform: scale(2.2);
+    }
+    14% {
+        opacity: 0.65;
+        transform: scale(5);
+        filter: blur(3px);
+    }
+    22% {
+        opacity: 0;
+        transform: scale(7);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(7);
+    }
+}
+
+@keyframes fw-shell-expand {
+    0%,
+    5% {
+        opacity: 0;
+        transform: scale(0);
+        filter: blur(8px);
+    }
+    8% {
+        opacity: 1;
+        transform: scale(0.06);
+        filter: blur(2px);
+    }
+    24% {
+        opacity: 1;
+        transform: scale(1);
+        filter: blur(0);
+    }
+    40% {
+        opacity: 0.92;
+        transform: scale(1.08);
+    }
+    62% {
+        opacity: 0.5;
+        transform: scale(1.18);
+        filter: blur(3px);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(1.38);
+        filter: blur(14px);
+    }
+}
+
+.glow-orbs {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(circle at 20% 30%, rgba(244, 114, 182, 0.18) 0%, transparent 42%),
+        radial-gradient(circle at 80% 20%, rgba(56, 189, 248, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 50% 85%, rgba(250, 204, 21, 0.12) 0%, transparent 45%);
+    animation: orb-shift 14s ease-in-out infinite alternate;
+}
+
+@keyframes orb-shift {
+    from {
+        opacity: 0.85;
+        transform: scale(1);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+}
+
+/* ----- Stage ----- */
+.stage {
+    position: relative;
+    z-index: 1;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: clamp(2rem, 6vw, 3.5rem) clamp(1.25rem, 4vw, 2rem) 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.title {
+    margin: 0 0 clamp(1.25rem, 4vw, 2rem);
+    line-height: 1.05;
+}
+
+.title-line {
+    display: block;
+}
+
+.title-happy {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 7vw, 3.35rem);
+    letter-spacing: 0.04em;
+    background: linear-gradient(135deg, #fef9c3 0%, #fde047 35%, #fb923c 65%, #f472b6 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 4px 24px rgba(250, 204, 21, 0.35));
+}
+
+.title-noor {
+    margin-top: 0.35rem;
+    font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+    font-weight: 800;
+    font-size: clamp(2.5rem, 10vw, 4.25rem);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #fff;
+    text-shadow:
+        0 0 40px rgba(244, 114, 182, 0.55),
+        0 4px 0 #831843,
+        0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+/* ----- Cake ----- */
+.cake-zone {
+    margin-bottom: clamp(1.75rem, 5vw, 2.5rem);
+}
+
+.cake-frame {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    animation: cake-float 4s ease-in-out infinite;
+}
+
+@keyframes cake-float {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.cake-photo {
+    display: block;
+    width: min(260px, 72vw);
+    height: auto;
+}
+
+.cake-fallback {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    min-height: 220px;
+    min-width: min(280px, 72vw);
+    padding: 0.5rem 0 0;
+}
+
+.cake {
+    position: relative;
+    transform-origin: bottom center;
+    animation: cake-wobble 3s ease-in-out infinite;
+}
+
+@keyframes cake-wobble {
+    0%,
+    100% {
+        transform: rotate(-1deg);
+    }
+    50% {
+        transform: rotate(1deg);
+    }
+}
+
+.layer {
+    margin: 0 auto;
+    border-radius: 14px 14px 10px 10px;
+}
+
+.layer.single {
+    width: 188px;
+    height: 86px;
+    background: linear-gradient(180deg, #fbcfe8 0%, #db2777 100%);
+}
+
+.frosting {
+    width: 188px;
+    height: 20px;
+    margin: 0 auto -6px;
+    background: repeating-linear-gradient(
+        90deg,
+        #fff 0px,
+        #fff 12px,
+        #fbcfe8 12px,
+        #fbcfe8 24px
+    );
+    border-radius: 16px 16px 4px 4px;
+}
+
+.candles {
+    display: flex;
+    justify-content: center;
+    gap: 22px;
+    margin-bottom: -10px;
+    position: relative;
+    z-index: 2;
+}
+
+.flame {
+    position: relative;
+    width: 12px;
+    height: 16px;
+    margin-top: -40px;
+    background: radial-gradient(circle at 50% 85%, #fbbf24, #f97316 55%, transparent 72%);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    animation: flicker 0.45s ease-in-out infinite alternate;
+    box-shadow: 0 0 14px #fbbf24;
+}
+
+.flame::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    transform: translateX(-50%);
+    width: 7px;
+    height: 30px;
+    margin-top: -2px;
+    border-radius: 3px;
+    background: linear-gradient(180deg, #fef9c3, #eab308);
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+    z-index: -1;
+}
+
+.flame:nth-child(2) {
+    animation-delay: 0.12s;
+}
+
+.flame:nth-child(3) {
+    animation-delay: 0.24s;
+}
+
+@keyframes flicker {
+    from {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+    to {
+        transform: scale(1.08) translateY(-2px);
+        opacity: 0.85;
+    }
+}
+
+/* ----- Wishes (textarea-style) ----- */
+.wishes-block {
+    width: 100%;
+    max-width: 560px;
+}
+
+.wishes-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(248, 250, 252, 0.65);
+    margin-bottom: 0.65rem;
+}
+
+.wishes-field {
+    width: 100%;
+    text-align: left;
+    padding: 1.25rem 1.35rem;
+    min-height: 200px;
+    border-radius: 1rem;
+    background: rgba(15, 23, 42, 0.65);
+    border: 1px solid rgba(248, 250, 252, 0.14);
+    box-shadow:
+        0 18px 48px rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(10px);
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: clamp(0.95rem, 2.4vw, 1.05rem);
+    line-height: 1.75;
+    color: #e2e8f0;
+    outline: none;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.wishes-field:focus-visible {
+    border-color: rgba(251, 191, 36, 0.45);
+    box-shadow:
+        0 18px 48px rgba(0, 0, 0, 0.35),
+        0 0 0 3px rgba(251, 191, 36, 0.15);
+}
+
+.wishes-field p {
+    margin: 0 0 1rem;
+}
+
+.wishes-field p:last-child {
+    margin-bottom: 0;
+}
