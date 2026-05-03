@@ -29,6 +29,7 @@
                             }
                         ],
                         "styles": [
+                            "node_modules/bootstrap/dist/css/bootstrap.min.css",
                             "src/assets/styles.scss",
                             "src/assets/tailwind.css"
                         ],
@@ -36,6 +37,12 @@
                     },
                     "configurations": {
                         "production": {
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/env/environment.development.ts",
+                                    "with": "src/env/environment.ts"
+                                }
+                            ],
                             "budgets": [
                                 {
                                     "type": "initial",
@@ -51,6 +58,12 @@
                             "outputHashing": "all"
                         },
                         "development": {
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/env/environment.ts",
+                                    "with": "src/env/environment.development.ts"
+                                }
+                            ],
                             "optimization": false,
                             "extractLicenses": false,
                             "sourceMap": true
@@ -83,6 +96,7 @@
                             "src/assets"
                         ],
                         "styles": [
+                            "node_modules/bootstrap/dist/css/bootstrap.min.css",
                             "src/assets/styles.scss"
                         ],
                         "scripts": []

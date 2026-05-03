@@ -1,0 +1,104 @@
+<div class="auth-wrapper d-flex align-items-center justify-content-center">
+    <p-dialog
+        
+        [(visible)]="showAuthDialog"
+        [modal]="true"
+        [draggable]="false"
+        [resizable]="false"
+        [closable]="false"
+        [style]="{ width: 'min(95vw, 460px)' }"
+        styleClass="auth-dialog"
+    >
+        @if (showRegisterForm) {
+            <form [formGroup]="registerForm" (ngSubmit)="RegisterSubmit()" class="auth-form">
+                <h2 class="form-title text-center">Register</h2>
+
+                <div class="field-group mb-3">
+                    <label for="registerUsername">Username</label>
+                    <input id="registerUsername" type="text" pInputText formControlName="username"  styleClass="w-100" placeholder="Enter username" (blur)="markFieldBlurred('registerUsername')" />
+                    @if (fieldBlurred['registerUsername'] && registerForm.get('username')?.invalid) {
+                        <small class="error-text">Username is required (minimum 3 characters).</small>
+                    }
+                </div>
+
+                <div class="field-group mb-3">
+                    <label for="registerPassword">Password</label>
+                    <p-password
+                        inputId="registerPassword"
+                        formControlName="password"
+                        [feedback]="false"
+                        [toggleMask]="true"
+                        styleClass="w-100"
+                        placeholder="Enter password"
+                        (onBlur)="markFieldBlurred('registerPassword')"
+                    />
+                    @if (fieldBlurred['registerPassword'] && registerForm.get('password')?.invalid) {
+                        <small class="error-text">Password is required (minimum 6 characters).</small>
+                    }
+                </div>
+
+                <div class="field-group mb-5">
+                    <label for="registerConfirmPassword">Confirm Password</label>
+                    <p-password
+                        inputId="registerConfirmPassword"
+                        formControlName="confirmPassword"
+                        [feedback]="false"
+                        [toggleMask]="true"
+                        styleClass="w-100"
+                        placeholder="Re-enter password"
+                        (onBlur)="markFieldBlurred('registerConfirmPassword')"
+                    />
+                    @if (fieldBlurred['registerConfirmPassword'] && registerForm.get('confirmPassword')?.invalid) {
+                        <small class="error-text">ReConfirm Password is required.</small>
+                    }
+                    @if ((fieldBlurred['registerPassword'] || fieldBlurred['registerConfirmPassword']) && registerForm.errors?.['passwordMismatch']) {
+                        <small class="error-text">Password and ReConfirm Password must match.</small>
+                    }
+                </div>
+
+                <p-button type="submit" [disabled]="loadingSignup" class="text-center"  label="Signup" styleClass="w-100 mt-2" />
+
+                  
+                <p class="auth-switch-text mb-0">
+                    If have login 
+                    <button type="button" class="auth-switch-btn " (click)="goToLogin()">Login</button>
+                </p>
+            </form>
+        } @else {
+            <form [formGroup]="loginForm" (ngSubmit)="submitLogin()" class="auth-form">
+                <h2 class="form-title text-center">Login</h2>
+
+                <div class="field-group">
+                    <label for="loginUsername">Username</label>
+                    <input id="loginUsername" type="text" pInputText formControlName="username"  styleClass="w-100" placeholder="Enter username" (blur)="markFieldBlurred('loginUsername')" />
+                    @if (fieldBlurred['loginUsername'] && loginForm.get('username')?.invalid) {
+                        <small class="error-text">Username is required.</small>
+                    }
+                </div>
+
+                <div class="field-group">
+                    <label for="loginPassword">Password</label>
+                    <p-password
+                        inputId="loginPassword"
+                        formControlName="password"
+                        [feedback]="false"
+                        [toggleMask]="true"
+                        styleClass="w-100"
+                        placeholder="Enter password"
+                        (onBlur)="markFieldBlurred('loginPassword')"
+                    />
+                    @if (fieldBlurred['loginPassword'] && loginForm.get('password')?.invalid) {
+                        <small class="error-text">Password is required.</small>
+                    }
+                </div>
+
+                <p-button type="submit" [disabled]="loadingLogin" label="Submit" class="text-center" styleClass="w-100 mt-2" />
+
+                <p class="auth-switch-text mb-0">
+                    If have no login then create it
+                    <button type="button" class="auth-switch-btn " (click)="goToSignup()">Sign up</button>
+                </p>
+            </form>
+        }
+    </p-dialog>
+</div>
