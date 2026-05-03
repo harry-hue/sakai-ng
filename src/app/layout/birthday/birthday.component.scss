@@ -19,43 +19,6 @@
     pointer-events: none;
 }
 
-.music-toggle {
-    position: fixed;
-    right: clamp(0.75rem, 3vw, 1.25rem);
-    bottom: clamp(0.75rem, 3vw, 1.25rem);
-    z-index: 20;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.45rem 0.85rem;
-    border: none;
-    border-radius: 999px;
-    cursor: pointer;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: #0f172a;
-    background: linear-gradient(135deg, #fef9c3 0%, #fde047 45%, #fb923c 100%);
-    box-shadow:
-        0 4px 20px rgba(0, 0, 0, 0.35),
-        0 0 0 1px rgba(255, 255, 255, 0.25) inset;
-    transition:
-        transform 0.15s ease,
-        filter 0.15s ease;
-}
-
-.music-toggle:hover {
-    filter: brightness(1.08);
-    transform: scale(1.03);
-}
-
-.music-toggle:active {
-    transform: scale(0.98);
-}
-
-.music-toggle-label {
-    font-size: 0.8rem;
-}
-
 /* ----- Fireworks (radial burst / sky vibe) ----- */
 .fireworks {
     position: fixed;
@@ -318,9 +281,9 @@
 .stage {
     position: relative;
     z-index: 1;
-    max-width: 720px;
+    max-width: min(1080px, 100%);
     margin: 0 auto;
-    padding: clamp(2rem, 6vw, 3.5rem) clamp(1.25rem, 4vw, 2rem) 3rem;
+    padding: clamp(2rem, 6vw, 3.5rem) clamp(1rem, 3vw, 1.5rem) 3rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -341,11 +304,11 @@
     font-weight: 700;
     font-size: clamp(2rem, 7vw, 3.35rem);
     letter-spacing: 0.04em;
-    background: linear-gradient(135deg, #fef9c3 0%, #fde047 35%, #fb923c 65%, #f472b6 100%);
+    background: linear-gradient(165deg, #fffffe 0%, #faf8f3 38%, #f0ece4 72%, #e8e4dc 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    filter: drop-shadow(0 4px 24px rgba(250, 204, 21, 0.35));
+    filter: drop-shadow(0 0 18px rgba(255, 255, 252, 0.85)) drop-shadow(0 0 42px rgba(255, 253, 248, 0.45));
 }
 
 .title-noor {
@@ -355,11 +318,12 @@
     font-size: clamp(2.5rem, 10vw, 4.25rem);
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: #fff;
-    text-shadow:
-        0 0 40px rgba(244, 114, 182, 0.55),
-        0 4px 0 #831843,
-        0 8px 24px rgba(0, 0, 0, 0.45);
+    background: linear-gradient(175deg, #ffffff 0%, #fcfbf7 35%, #f5f2eb 65%, #ebe6dd 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 0 22px rgba(255, 255, 255, 0.95)) drop-shadow(0 0 56px rgba(255, 252, 245, 0.5))
+        drop-shadow(0 4px 24px rgba(250, 248, 242, 0.35));
 }
 
 /* ----- Cake ----- */
@@ -494,55 +458,161 @@
     }
 }
 
-/* ----- Wishes (textarea-style) ----- */
+/* ----- Photo slider (4 visible, auto scroll, edge fade) ----- */
+.photo-slider {
+    width: min(100%, calc(100vw - 2rem));
+    max-width: 1040px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: clamp(1.75rem, 5vw, 2.75rem);
+    align-self: center;
+    min-height: clamp(260px, 42vw, 420px);
+}
+
+.photo-slider__viewport {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    margin: 0 auto;
+    border-radius: 0.85rem;
+    container-type: inline-size;
+    container-name: photo-strip;
+}
+
+.photo-slider__track {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 0.65rem;
+    width: max-content;
+    animation: photo-marquee 36s linear infinite;
+    will-change: transform;
+}
+
+.photo-slider__track img {
+    width: calc((100cqi - 1.95rem) / 4);
+    height: clamp(288px, 40vw, 460px);
+    min-height: 288px;
+    flex-shrink: 0;
+    object-fit: cover;
+    border-radius: 0.6rem;
+    box-shadow:
+        0 12px 36px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(255, 251, 235, 0.08);
+}
+
+.photo-slider__fade {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: min(64px, 14vw);
+    z-index: 2;
+    pointer-events: none;
+}
+
+.photo-slider__fade--left {
+    left: 0;
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.45) 45%, transparent 100%);
+}
+
+.photo-slider__fade--right {
+    right: 0;
+    background: linear-gradient(270deg, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.45) 45%, transparent 100%);
+}
+
+@keyframes photo-marquee {
+    0% {
+        transform: translate3d(0, 0, 0);
+    }
+    100% {
+        transform: translate3d(-50%, 0, 0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .photo-slider__track {
+        animation: none;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+/* ----- Wishes (pastel white / gold — no border — typewriter) ----- */
 .wishes-block {
     width: 100%;
-    max-width: 560px;
+    max-width: min(620px, 100%);
 }
 
 .wishes-label {
     display: block;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     font-weight: 600;
-    letter-spacing: 0.22em;
+    letter-spacing: 0.28em;
     text-transform: uppercase;
-    color: rgba(248, 250, 252, 0.65);
-    margin-bottom: 0.65rem;
+    color: rgba(255, 251, 235, 0.72);
+    margin-bottom: 0.85rem;
 }
 
 .wishes-field {
     width: 100%;
     text-align: left;
-    padding: 1.25rem 1.35rem;
-    min-height: 200px;
-    border-radius: 1rem;
-    background: rgba(15, 23, 42, 0.65);
-    border: 1px solid rgba(248, 250, 252, 0.14);
-    box-shadow:
-        0 18px 48px rgba(0, 0, 0, 0.35),
-        inset 0 1px 0 rgba(255, 255, 255, 0.06);
-    backdrop-filter: blur(10px);
+    padding: 1.15rem 0;
+    min-height: 180px;
+    border-radius: 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    backdrop-filter: none;
     font-family: Georgia, 'Times New Roman', serif;
-    font-size: clamp(0.95rem, 2.4vw, 1.05rem);
-    line-height: 1.75;
-    color: #e2e8f0;
     outline: none;
-    transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
 }
 
-.wishes-field:focus-visible {
-    border-color: rgba(251, 191, 36, 0.45);
-    box-shadow:
-        0 18px 48px rgba(0, 0, 0, 0.35),
-        0 0 0 3px rgba(251, 191, 36, 0.15);
+.wishes-field__typed {
+    white-space: pre-wrap;
+    display: inline-block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    background: none;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    font-weight: 700;
+    font-size: clamp(1.08rem, 2.85vw, 1.28rem);
+    line-height: 1.76;
+    color: #fdfcf7;
+    text-shadow: none;
 }
 
-.wishes-field p {
-    margin: 0 0 1rem;
+.wishes-field:focus-visible .wishes-field__typed {
+    outline: none;
 }
 
-.wishes-field p:last-child {
-    margin-bottom: 0;
+.wishes-field__caret {
+    display: inline-block;
+    width: 0.085em;
+    min-height: 1.15em;
+    margin-left: 1px;
+    vertical-align: -0.12em;
+    background: linear-gradient(180deg, #fef9c3, #eab308);
+    border-radius: 1px;
+    animation: wish-caret-blink 1s step-end infinite;
+}
+
+@keyframes wish-caret-blink {
+    0%,
+    50% {
+        opacity: 1;
+    }
+    51%,
+    100% {
+        opacity: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .wishes-field__caret {
+        animation: none;
+        opacity: 0;
+    }
 }

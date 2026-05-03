@@ -1,20 +1,15 @@
-<div class="birthday-root">
-    <!-- Background music: Happy Alley — incompetech.com (CC BY); swap MP3 in public/audio if needed -->
-    <audio #bgAudio class="birthday-audio" preload="auto" loop playsinline>
-        <source src="/audio/birthday-bg.mp3" type="audio/mpeg" />
-    </audio>
-
-    <button
-        type="button"
-        class="music-toggle"
-        (click)="toggleMusic()"
-        [attr.aria-pressed]="musicPlaying"
-        [attr.aria-label]="musicPlaying ? 'Pause birthday music' : 'Play birthday music'"
-        title="{{ autoplayBlocked ? 'Tap to play music' : (musicPlaying ? 'Pause music' : 'Play music') }}"
-    >
-        {{ musicPlaying ? '🔇' : '🔊' }}
-        <span class="music-toggle-label">{{ musicPlaying ? 'Pause' : 'Play' }}</span>
-    </button>
+<div class="birthday-root" (click)="onUserInteract()" (touchstart)="onUserInteract()">
+    @if (bgmMp3Src) {
+        <audio
+            #bgmMp3
+            class="birthday-audio"
+            preload="auto"
+            loop
+            playsinline
+            [src]="bgmMp3Src"
+            (error)="onBgmMp3Error()"
+        ></audio>
+    }
 
     <div class="fireworks" aria-hidden="true">
         @for (n of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]; track n) {
@@ -27,109 +22,64 @@
         }
     </div>
 
-
-
     <div class="glow-orbs" aria-hidden="true"></div>
 
-
-
     <main class="stage">
+        @if (showIntro()) {
+            <h1 class="title">
+                <span class="title-line title-happy">Happy Birthday</span>
+                <span class="title-line title-noor">Noor</span>
+            </h1>
 
-        <h1 class="title">
-
-            <span class="title-line title-happy">Happy Birthday</span>
-
-            <span class="title-line title-noor">Noor</span>
-
-        </h1>
-
-
-
-        <div class="cake-zone">
-
-            <div class="cake-frame">
-
-                @if (cakeImageOk) {
-
-                    <img
-
-                        class="cake-photo"
-
-                        src="/images/birthday-cake.svg"
-
-                        alt="Decorated birthday cake with candles"
-
-                        width="280"
-
-                        height="260"
-
-                        (error)="onCakeImageError()"
-
-                    />
-
-                }
-
-                @if (!cakeImageOk) {
-
-                    <div class="cake-fallback" aria-hidden="true">
-
-                        <div class="cake">
-
-                            <div class="frosting"></div>
-
-                            <div class="candles">
-
-                                <span class="flame"></span>
-
-                                <span class="flame"></span>
-
-                                <span class="flame"></span>
-
+            <div class="cake-zone">
+                <div class="cake-frame">
+                    @if (cakeImageOk) {
+                        <img
+                            class="cake-photo"
+                            src="/images/birthday-cake.svg"
+                            alt="Decorated birthday cake with candles"
+                            width="280"
+                            height="260"
+                            (error)="onCakeImageError()"
+                        />
+                    }
+                    @if (!cakeImageOk) {
+                        <div class="cake-fallback" aria-hidden="true">
+                            <div class="cake">
+                                <div class="frosting"></div>
+                                <div class="candles">
+                                    <span class="flame"></span>
+                                    <span class="flame"></span>
+                                    <span class="flame"></span>
+                                </div>
+                                <div class="layer single"></div>
                             </div>
-
-                            <div class="layer single"></div>
-
                         </div>
-
-                    </div>
-
-                }
-
+                    }
+                </div>
             </div>
-
-        </div>
-
-
+        } @else {
+            <div class="photo-slider" aria-label="Birthday photo gallery">
+                <div class="photo-slider__viewport">
+                    <div class="photo-slider__fade photo-slider__fade--left" aria-hidden="true"></div>
+                    <div class="photo-slider__fade photo-slider__fade--right" aria-hidden="true"></div>
+                    <div class="photo-slider__track">
+                        @for (src of galleryLoopTrack; track $index) {
+                            <img [src]="src" alt="" loading="lazy" decoding="async" />
+                        }
+                    </div>
+                </div>
+            </div>
+        }
 
         <section class="wishes-block">
-
             <label class="wishes-label" for="wishes-noor">A wish for you</label>
-
-            <div id="wishes-noor" class="wishes-field" tabindex="0" role="textbox" aria-readonly="true">
-
-                <p>
-
-                    Dear Noor — on your special day, may every moment feel light, warm, and full of joy. May this year bring you
-
-                    laughter that lingers, dreams that grow clearer, and kindness returned to you tenfold. You deserve days that
-
-                    sparkle as brightly as you do.
-
-                </p>
-
-                <p>
-
-                    Here’s to candlelight and cake, to old memories that still make you smile, and to new ones waiting just around
-
-                    the corner. Happy Birthday — celebrate yourself today; the world is better with you in it.
-
-                </p>
-
+            <div id="wishes-noor" class="wishes-field" tabindex="0" role="textbox" aria-readonly="true" aria-live="polite">
+                <span class="wishes-field__typed">{{ typedWish() }}</span>
+                @if (typedWish().length < wishTypingSource.length) {
+                    <span class="wishes-field__caret" aria-hidden="true"></span>
+                }
             </div>
-
         </section>
-
     </main>
-
 </div>
-
